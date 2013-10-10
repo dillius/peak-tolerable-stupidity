@@ -2,7 +2,8 @@
   (:use clojure.test
         ring.mock.request
         clojure.walk
-        com.dillius.pts.handler)
+        com.dillius.pts.handler
+        cronj.core)
   (:require [cheshire.core :refer :all]))
 
 (deftest test-app
@@ -55,4 +56,30 @@
         )
       )
     )
+
+  ;;(clear-data) ; Clear the data out
+
+  (def T1 (local-time 2013 10 01 23 59 58))
+  (def T2 (local-time 2013 10 02 0 0 2))
+  (simulate cj T1 T2)
+
+  (testing "api entry POST 4"
+    (let [response (app (request :post "/api/entry" {:user "derp" :level "15"}))]
+      (is (= (:status response) 200))
+      )
+    )
+
+  (testing "api entries GET after-clear"
+    (let [response (app (request :get "/api/entries"))]
+      (is (= (:status response) 200))
+      (let [responseFields (parse-string (:body response))]
+        (is (not (nil? responseFields)))
+        (is (= "15" ((responseFields "derp") "level")))
+        (is (nil? (responseFields "mike")))
+        (is (nil? (responseFields "dillius")))
+        )
+      )
+    )
+
+
   )

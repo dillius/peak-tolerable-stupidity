@@ -5,7 +5,8 @@
                  [compojure "1.1.5"]
                  [cheshire "5.0.2"]
                  [clj-time "0.6.0"]
-                 [ring/ring-jetty-adapter "1.2.0"]]
+                 [ring/ring-jetty-adapter "1.2.0"]
+                 [im.chit/cronj "0.9.6"]]
   :aot [com.dillius.pts.main]
   :main com.dillius.pts.main
   :plugins [[lein-ring "0.8.2"]]
