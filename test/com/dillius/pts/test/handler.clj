@@ -14,8 +14,8 @@
       )
     )
 
-  (testing "api entry POST 2"
-    (let [response (app (request :post "/api/entry" {:user "mike" :level "78"}))]
+  (testing "api entry POST 2 with int"
+    (let [response (app (request :post "/api/entry" {:user "mike" :level 78}))]
       (is (= (:status response) 200))
       )
     )
@@ -25,7 +25,7 @@
       (is (= (:status response) 200))
       (let [responseFields (parse-string (:body response))]
         (is (not (nil? responseFields)))
-        (is (= "99" (responseFields "level")))
+        (is (= 99 (responseFields "level")))
         )
       )
     )
@@ -35,7 +35,7 @@
       (is (= (:status response) 200))
       (let [responseFields (parse-string (:body response))]
         (is (not (nil? responseFields)))
-        (is (= "78" (responseFields "level")))
+        (is (= 78 (responseFields "level")))
         )
       )
     )
@@ -51,8 +51,8 @@
       (is (= (:status response) 200))
       (let [responseFields (parse-string (:body response))]
         (is (not (nil? responseFields)))
-        (is (= "99" ((responseFields "dillius") "level")))
-        (is (= "40" ((responseFields "mike") "level")))
+        (is (= 99 ((responseFields "dillius") "level")))
+        (is (= 40 ((responseFields "mike") "level")))
         )
       )
     )
@@ -74,9 +74,58 @@
       (is (= (:status response) 200))
       (let [responseFields (parse-string (:body response))]
         (is (not (nil? responseFields)))
-        (is (= "15" ((responseFields "derp") "level")))
+        (is (= 15 ((responseFields "derp") "level")))
         (is (nil? (responseFields "mike")))
         (is (nil? (responseFields "dillius")))
+        )
+      )
+    )
+
+  (testing "api entry POST mod positive"
+    (let [response (app (request :post "/api/entry" {:user "derp" :level "+5"}))]
+      (is (= (:status response) 200))
+      )
+    )
+
+  (testing "api entry GET mod positive"
+    (let [response (app (request :get "/api/entry/derp"))]
+      (is (= (:status response) 200))
+      (let [responseFields (parse-string (:body response))]
+        (is (not (nil? responseFields)))
+        (is (= 20 (responseFields "level")))
+        )
+      )
+    )
+
+  (testing "api entry POST mod negative"
+    (let [response (app (request :post "/api/entry" {:user "derp" :level "-8"}))]
+      (is (= (:status response) 200))
+      )
+    )
+
+  (testing "api entry GET mod negative"
+    (let [response (app (request :get "/api/entry/derp"))]
+      (is (= (:status response) 200))
+      (let [responseFields (parse-string (:body response))]
+        (is (not (nil? responseFields)))
+        (is (= 12 (responseFields "level")))
+        )
+      )
+    )
+
+
+  (testing "api entry POST mod junk"
+    (let [response (app (request :post "/api/entry" {:user "derp" :level "d7t"}))]
+      (is (= (:status response) 200))
+      )
+    )
+
+  (testing "api entry GET mod junk"
+    (let [response (app (request :get "/api/entry/derp"))]
+      (is (= (:status response) 200))
+      (let [responseFields (parse-string (:body response))]
+        (is (not (nil? responseFields)))
+        (is (= 12 (responseFields "level")))
         )
       )
     )

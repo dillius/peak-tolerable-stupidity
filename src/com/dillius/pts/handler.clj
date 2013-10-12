@@ -10,14 +10,31 @@
 (defrecord Entry [level])
 (def data (ref {}))
 
-(defn upsert-entry
-  [user level]
-  (dosync
-   (alter data assoc-in [user :level] level)))
+(defn String->Number [str]
+  (let [n (read-string str)]
+    (if (number? n) n nil)))
+
+(defn modify-level
+  [current val]
+  (if (nil? (String->Number (subs val 0 1)))
+    (if (= (subs val 0 1) "+")
+      (+ current (String->Number (subs val 1)))
+      (if (= (subs val 0 1) "-")
+        (- current (String->Number (subs val 1)))
+        current))
+    (String->Number val)
+    ))
 
 (defn get-entry
   [user]
   (@data user))
+
+(defn upsert-entry
+  [user change]
+  (let [current (or (:level (get-entry user)) 0)
+        updated (modify-level current change)]
+    (dosync
+     (alter data assoc-in [user :level] updated))))
 
 (defn get-all
   []
