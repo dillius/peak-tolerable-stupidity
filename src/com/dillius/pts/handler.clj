@@ -10,19 +10,20 @@
 (defrecord Entry [level])
 (def data (ref {}))
 
-(defn String->Number [str]
-  (let [n (read-string str)]
-    (if (number? n) n nil)))
+(defn parse-int [s]
+  (try
+    (Integer/parseInt (re-find #"\A-?\d+" s))
+    (catch NumberFormatException e nil)))
 
 (defn modify-level
   [current val]
-  (if (nil? (String->Number (subs val 0 1)))
+  (if (nil? (parse-int (subs val 0 1)))
     (if (= (subs val 0 1) "+")
-      (+ current (String->Number (subs val 1)))
+      (+ current (parse-int (subs val 1)))
       (if (= (subs val 0 1) "-")
-        (- current (String->Number (subs val 1)))
+        (- current (parse-int (subs val 1)))
         current))
-    (String->Number val)
+    (parse-int val)
     ))
 
 (defn get-entry
@@ -32,13 +33,18 @@
 (defn upsert-entry
   [user change]
   (let [current (or (:level (get-entry user)) 0)
-        updated (modify-level current change)]
+        updated (modify-level current (clojure.string/replace (str change) #"[%]" ""))]
     (dosync
      (alter data assoc-in [user :level] updated))))
 
+
+(defn consolidate
+  [entry]
+  (assoc (second entry) :name (name (first entry))))
+
 (defn get-all
   []
-  @data)
+  (reverse (sort-by :level (map consolidate @data))))
 
 (defn clear-data
   ([] (dosync (alter data empty)))
