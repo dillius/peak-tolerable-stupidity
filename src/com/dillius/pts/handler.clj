@@ -26,6 +26,14 @@
     (parse-int val)
     ))
 
+(defn validate-level
+  [val]
+  (if (< val 0)
+    0
+    (if (> val 100)
+      100
+      val)))
+
 (defn get-entry
   [user]
   (@data user))
@@ -33,9 +41,10 @@
 (defn upsert-entry
   [user change]
   (let [current (or (:level (get-entry user)) 0)
-        updated (modify-level current (clojure.string/replace (str change) #"[%]" ""))]
+        updated (validate-level (modify-level current (clojure.string/replace (str change) #"[%]" "")))]
     (dosync
-     (alter data assoc-in [user :level] updated))))
+     (alter data assoc-in [user :level] updated))
+    (get-entry user)))
 
 
 (defn consolidate
@@ -54,7 +63,7 @@
 (defroutes app-routes
   (GET "/" [] (resp/resource-response "index.html" {:root "public"}))
 
-  (POST "/api/entry" {:keys [params]} (upsert-entry (:user params) (:level params)))
+  (POST "/api/entry" {:keys [params]} (generate-string (upsert-entry (:user params) (:level params))))
   (GET "/api/entry" {:keys [params]} (generate-string (get-entry (:user params))))
   (GET "/api/entry/:user" [user] (generate-string (get-entry user)))
 

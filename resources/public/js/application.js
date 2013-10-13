@@ -9,12 +9,29 @@ $(document).ready(function() {
         $('#level').val('');
     };
 
+    function toggleInput() {
+        if($('#input').is(':visible')) {
+            hideInput();
+        } else {
+            showInput();
+        }
+    };
+
     function loadData() {
         $.getJSON("/api/entries",
             function(json) {
+                $("#resultsBody tr").remove();
                 var tr;
                 for(var i = 0; i < json.length; i++) {
-
+                    tr = $('<tr/>');
+                    if(json[i].level > 80) {
+                        tr.addClass("danger");
+                    } else if(json[i].level > 50) {
+                        tr.addClass("warning");
+                    }
+                    tr.append("<td>" + json[i].name + "</td>");
+                    tr.append("<td>" + json[i].level + "</td>");
+                    $('#resultsBody').append(tr);
                 }
             }
         );
@@ -29,6 +46,7 @@ $(document).ready(function() {
                    level: $('#level').val()},
             success: function(data, status, xhr) {
                 hideInput();
+                loadData();
             },
             error: function (xhr, status, thrownError) {
                 hideInput();
@@ -41,7 +59,7 @@ $(document).ready(function() {
         });
     };
 
-    $('#addUpdate').on('click', showInput);
+    $('#addUpdate').on('click', toggleInput);
     $('#submit').on('click', submitUpdate);
     loadData();
 });
