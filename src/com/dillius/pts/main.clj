@@ -6,7 +6,7 @@
   (:gen-class))
 
 (defn -main [& [port]]
-  (let [port (Integer. (or port (System/getenv "PORT") 3010))]
+  (let [port (Integer. (or port (System/getenv "PORT") 3011))]
     (start! handler/cj)
     (run-jetty
      #'handler/app
