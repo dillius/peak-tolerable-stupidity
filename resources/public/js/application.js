@@ -62,4 +62,5 @@ $(document).ready(function() {
     $('#addUpdate').on('click', toggleInput);
     $('#submit').on('click', submitUpdate);
     loadData();
+    setInterval(loadData, 10000);
 });
