@@ -30,7 +30,9 @@ $(document).ready(function() {
                         tr.addClass("warning");
                     }
                     tr.append("<td>" + json[i].name + "</td>");
-                    tr.append("<td>" + json[i].level + "</td>");
+                    td = $("<td>" + json[i].level + "%</td>");
+                    td.addClass("right");
+                    tr.append(td);
                     $('#resultsBody').append(tr);
                 }
             }
