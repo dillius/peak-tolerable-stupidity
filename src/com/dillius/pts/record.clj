@@ -3,8 +3,7 @@
             [cheshire.core :refer :all]
             [cronj.core :refer :all]))
 
-(defrecord Entry [level])
-(def data (ref {}))
+(def data (agent {}))
 
 (defn parse-int [s]
   (try
@@ -34,13 +33,23 @@
   [user]
   (@data user))
 
+(defn asyncUpdate
+  [user change]
+  (fn [old-val]
+    (assoc-in old-val [user :level] (validate-level (modify-level (or (:level (old-val user)) 0) change)))))
+
 (defn upsert-entry
   [user change]
-  (let [current (or (:level (get-entry user)) 0)
-        updated (validate-level (modify-level current (clojure.string/replace (str change) #"[%]" "")))]
-    (dosync
-     (alter data assoc-in [user :level] updated))
-    (get-entry user)))
+  (send data (asyncUpdate user change))
+  (str "Queued"))
+
+(comment (defn upsert-entry
+           [user change]
+           (let [current (or (:level (get-entry user)) 0)
+                 updated (validate-level (modify-level current (clojure.string/replace (str change) #"[%]" "")))]
+             (dosync
+              (alter data assoc-in [user :level] updated))
+             (get-entry user))))
 
 
 (defn consolidate
@@ -52,6 +61,8 @@
   (reverse (sort-by :level (map consolidate @data))))
 
 (defn clear-data
-  ([] (dosync (alter data empty)))
+  ([]
+     (comment (dosync (alter data empty)))
+     (send data empty))
   ([t opts] (clear-data))
   )
