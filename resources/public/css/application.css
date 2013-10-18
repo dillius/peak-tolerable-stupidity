@@ -8,7 +8,7 @@ h1, h2, h3, h4, h5, h6 {
 
 h2.header {
     font-size: 30px;
-    margin-bottom: 10px;
+    margin-bottom: 25px;
     margin-top: 20px;
 }
 
@@ -18,17 +18,32 @@ table {
     width: 100%;
 }
 
+tr {
+    border-bottom-color: #E0E0E0;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+
 td {
     font-size: large;
     font-weight: bold;
 }
 
+
+
+
 .warning {
     background-color: #FCF8E3;
-    border-color: #FBEED5;
+    //border-color: #FBEED5;
 }
 
 .danger {
     background-color: #F2DEDE;
-    border-color: #EED3D7;
+    //border-color: #EED3D7;
+}
+
+
+
+#addUpdate {
+    float: right;
 }
