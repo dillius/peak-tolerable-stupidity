@@ -66,3 +66,16 @@
      (comment (send data empty)))
   ([t opts] (clear-data))
   )
+
+(defn zero-map
+  [m]
+  (into {} (for [[k v] m] [k 0])))
+
+(defn zero-levels
+  [m]
+  (into {} (for [[k v] m] [k (assoc v :level 0)])))
+
+(defn zero-data
+  ([]
+     (dosync (alter data zero-levels)))
+  ([t opts] (zero-data)))

@@ -26,7 +26,7 @@
 
 (def clear-task
   {:id "clear-task"
-   :handler rec/clear-data
+   :handler rec/zero-data
    :schedule "0 0 0 * * * *"
    })
 
