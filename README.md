@@ -3,4 +3,4 @@ Peak Tolerable Stupidity Tracker [![Build Status](https://travis-ci.org/dillius/
 
 Goal
 ----------------
-How pissed off are you currently at the stupidity in your day?
+How close are you to your daily limit for dealing with foolishness?
