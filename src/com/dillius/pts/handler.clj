@@ -23,11 +23,3 @@
 
 (def app
   (handler/site app-routes))
-
-(def clear-task
-  {:id "clear-task"
-   :handler rec/zero-data
-   :schedule "0 0 0 * * * *"
-   })
-
-(def cj (cronj :entries [clear-task]))

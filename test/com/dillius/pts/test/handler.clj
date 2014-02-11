@@ -3,6 +3,7 @@
         ring.mock.request
         clojure.walk
         com.dillius.pts.handler
+        com.dillius.pts.main
         cronj.core)
   (:require [cheshire.core :refer :all]))
 
@@ -64,7 +65,7 @@
 
   (def T1 (local-time 2013 10 01 23 59 58))
   (def T2 (local-time 2013 10 02 0 0 2))
-  (simulate cj T1 T2)
+  (simulate cronJobs T1 T2)
 
   (testing "api entry POST 4"
     (let [response (app (request :post "/api/entry" {:user "derp" :level "15"}))]
