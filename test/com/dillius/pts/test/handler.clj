@@ -63,9 +63,23 @@
 
   ;;(clear-data) ; Clear the data out
 
-  (def T1 (local-time 2013 10 01 23 59 58))
-  (def T2 (local-time 2013 10 02 0 0 2))
+  (def T1 (local-time 2013 10 01 18 59 58))
+  (def T2 (local-time 2013 10 02 6 0 2))
   (simulate cronJobs T1 T2)
+
+(testing "api entries GET after-clear"
+    (let [response (app (request :get "/api/entries"))]
+      (is (= (:status response) 200))
+      (let [responseFields (parse-string (:body response))]
+        (is (not (nil? responseFields)))
+        (is (= 2 (count responseFields)))
+        (is (= 0 ((responseFields 0) "level")))
+        (is (= "dillius" ((responseFields 0) "name")))
+        (is (= 0 ((responseFields 1) "level")))
+        (is (= "mike" ((responseFields 1) "name")))
+        )
+      )
+    )
 
   (testing "api entry POST 4"
     (let [response (app (request :post "/api/entry" {:user "derp" :level "15"}))]
@@ -73,7 +87,7 @@
       )
     )
 
-  (testing "api entries GET after-clear"
+  (testing "api entries GET after-clear 2"
     (let [response (app (request :get "/api/entries"))]
       (is (= (:status response) 200))
       (let [responseFields (parse-string (:body response))]
