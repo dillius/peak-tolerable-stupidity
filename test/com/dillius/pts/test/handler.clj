@@ -67,7 +67,7 @@
   (def T2 (local-time 2013 10 02 6 0 2))
   (simulate cronJobs T1 T2)
 
-(testing "api entries GET after-clear"
+  (testing "api entries GET after-clear"
     (let [response (app (request :get "/api/entries"))]
       (is (= (:status response) 200))
       (let [responseFields (parse-string (:body response))]
@@ -148,6 +148,23 @@
       (let [responseFields (parse-string (:body response))]
         (is (not (nil? responseFields)))
         (is (= 12 (responseFields "level")))
+      )
+      )
+    )
+
+  (testing "api entry POST name junk"
+    (let [response (app (request :post "/api/entry" {:user "" :level "20"}))]
+      (is (= (:status response) 406))
+      (is (= (:body response) "Invalid Username!"))
+      )
+    )
+
+  (testing "api entries GET after-junk no add"
+    (let [response (app (request :get "/api/entries"))]
+      (is (= (:status response) 200))
+      (let [responseFields (parse-string (:body response))]
+        (is (not (nil? responseFields)))
+        (is (= 3 (count responseFields)))
         )
       )
     )

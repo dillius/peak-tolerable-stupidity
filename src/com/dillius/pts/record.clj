@@ -31,7 +31,7 @@
 
 (defn get-entry
   [user]
-  (@data user))
+  (generate-string (@data user)))
 
 (comment (defn asyncUpdate
            [user change]
@@ -45,11 +45,13 @@
 
 (defn upsert-entry
   [user change]
-  (let [current (or (:level (get-entry user)) 0)
+  (let [current (or (:level (@data user)) 0)
         updated (validate-level (modify-level current (clojure.string/replace (str change) #"[%]" "")))]
-    (dosync
-     (alter data assoc-in [user :level] updated))
-    (get-entry user)))
+    (if (clojure.string/blank? user)
+      {:status 406 :body "Invalid Username!"}
+      (dosync
+       (alter data assoc-in [user :level] updated)
+       (get-entry user)))))
 
 
 (defn consolidate
@@ -58,7 +60,7 @@
 
 (defn get-all
   []
-  (reverse (sort-by :level (map consolidate @data))))
+  (generate-string (reverse (sort-by :level (map consolidate @data)))))
 
 (defn clear-data
   ([]

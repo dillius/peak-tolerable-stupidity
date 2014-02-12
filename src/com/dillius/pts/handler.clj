@@ -12,11 +12,11 @@
 (defroutes app-routes
   (GET "/" [] (resp/resource-response "index.html" {:root "public"}))
 
-  (POST "/api/entry" {:keys [params]} (generate-string (rec/upsert-entry (:user params) (:level params))))
-  (GET "/api/entry" {:keys [params]} (generate-string (rec/get-entry (:user params))))
-  (GET "/api/entry/:user" [user] (generate-string (rec/get-entry user)))
+  (POST "/api/entry" {:keys [params]} (rec/upsert-entry (:user params) (:level params)))
+  (GET "/api/entry" {:keys [params]} (rec/get-entry (:user params)))
+  (GET "/api/entry/:user" [user] (rec/get-entry user))
 
-  (GET "/api/entries" {:keys [params]} (generate-string (rec/get-all)))
+  (GET "/api/entries" {:keys [params]} (rec/get-all))
 
   (route/resources "/")
   (route/not-found "Not Found"))
