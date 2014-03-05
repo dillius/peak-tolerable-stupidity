@@ -6,7 +6,7 @@
             [clojure.walk :refer :all]
             [cheshire.core :refer :all]
             [cronj.core :refer :all]
-            [com.dillius.pts.record :as rec]))
+            [com.dillius.pts.recordMongo :as rec]))
 
 
 (defroutes app-routes

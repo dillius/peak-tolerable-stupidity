@@ -9,6 +9,8 @@
 
 (deftest test-app
 
+  (com.dillius.pts.recordMongo/clear-data)
+
   (testing "api entry POST"
     (let [response (app (request :post "/api/entry" {:user "dillius" :level "99"}))]
       (is (= (:status response) 200))
@@ -74,9 +76,9 @@
         (is (not (nil? responseFields)))
         (is (= 2 (count responseFields)))
         (is (= 0 ((responseFields 0) "level")))
-        (is (= "dillius" ((responseFields 0) "name")))
+        (is (= "mike" ((responseFields 0) "name")))
         (is (= 0 ((responseFields 1) "level")))
-        (is (= "mike" ((responseFields 1) "name")))
+        (is (= "dillius" ((responseFields 1) "name")))
         )
       )
     )
@@ -96,9 +98,9 @@
         (is (= 15 ((responseFields 0) "level")))
         (is (= "derp" ((responseFields 0) "name")))
         (is (= 0 ((responseFields 1) "level")))
-        (is (= "dillius" ((responseFields 1) "name")))
+        (is (= "mike" ((responseFields 1) "name")))
         (is (= 0 ((responseFields 2) "level")))
-        (is (= "mike" ((responseFields 2) "name")))
+        (is (= "dillius" ((responseFields 2) "name")))
         )
       )
     )

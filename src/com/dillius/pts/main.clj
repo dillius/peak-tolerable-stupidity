@@ -2,7 +2,7 @@
   (:use ring.adapter.jetty)
   (:require
    [com.dillius.pts.handler :as handler]
-   [com.dillius.pts.record :as rec]
+   [com.dillius.pts.recordMongo :as rec]
    [cronj.core :refer :all])
   (:gen-class))
 
