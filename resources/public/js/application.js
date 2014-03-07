@@ -31,7 +31,7 @@ $(document).ready(function() {
                     }
                     tr.append("<td>" + json[i].name + "</td>");
                     td = $("<td>" + json[i].level + "%</td>");
-                    td.addClass("right");
+                    td.addClass("end");
                     tr.append(td);
                     $('#resultsBody').append(tr);
                 }

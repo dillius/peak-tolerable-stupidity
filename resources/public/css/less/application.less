@@ -1,0 +1,112 @@
+/*
+ QUICK REFERENCE:
+
+    @var: value;
+        Set a variable.
+
+    attribute: @var;
+        Reference a variable.
+
+    selector1 > selector2 { ... }
+        Selects only the element matching selector2 that are a direct descendent of an element
+        matching selector1.
+
+        Ex: .outer > div { color: black }
+
+        <div class="outer">
+          <div> <!-- matched -->
+            <div> <!-- not matched -->
+        </div></div></div>
+
+    .class([params]);
+        A LESS mixin. Pulls in all the definitions for the specified class,
+        including nested definitions but not parallel definitions.
+
+        Ex: div { .mixin() }
+            .mixin {
+               border: 1px solid orange; // included
+               div { color: black } // included
+            }
+            .mixin div { background-color: pink; } // not included
+
+
+    #id > .class([params])
+        A LESS namespaced mixin. Same as above, except the class is nested under
+        an id (namespace). #gradient > .vertical(...) is a common use.
+
+        Ex: div { #mixins > .mixin() }
+            #mixins {
+                .mixin { color: black } // included
+            }
+            .mixin { background-color: pink; } // not included
+
+
+    &
+        Provides a way to attach pseudo-classes or other modifiers inside nesting.
+
+        Ex:
+            div.outer {
+                &.awesome     { ... } // same as: div.outer.awesome
+                & > thing     { ... } // same as: div.outer > thing
+                &:first-child { ... } // same as: div.outer:first-child
+            }
+*/
+
+@import "bootstrap/bootstrap.less";
+
+body {
+  padding-top: 30px;
+}
+
+header {
+  .make-row();
+  & > h1 {
+    .make-md-column(6);
+    .make-md-column-offset(1);
+    font-size: 30px;
+    margin-bottom: 25px;
+    margin-top: 20px;
+  }
+  & > div {
+    .make-md-column(3);
+    .make-md-column-offset(1);
+    button#addUpdate {
+      .btn();
+      float: right;
+    }
+  }
+}
+
+section#input {
+  display: none;
+  form {
+    .make-row();
+    input:first-child {
+      .make-md-column-offset(1);
+    }
+    input {
+      .form-control();
+      .make-md-column(2);
+    }
+    button {
+      .btn-sm();
+      .btn-primary();
+    }
+  }
+}
+
+section#output {
+  .make-row();
+  table {
+    .table();
+    .make-md-column(8);
+    .make-md-column-offset(1);
+    border-color: #E0E0E0;
+  }
+  th.end {
+    text-align: right;
+  }
+  td.end {
+    text-align: right;
+  }
+}
