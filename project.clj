@@ -1,4 +1,4 @@
-(defproject peak-tolerable-stupidity "0.1.1-SNAPSHOT"
+(defproject peak-tolerable-stupidity "0.1.2"
   :description "Peak Tolerable Stupidity Tracker"
   :url "http://www.peaktolerablestupidity.com"
   :dependencies [[org.clojure/clojure "1.5.1"]
@@ -8,7 +8,7 @@
                  [ring/ring-jetty-adapter "1.2.0"]
                  [im.chit/cronj "0.9.6"]
                  [com.novemberain/monger "1.7.0"]
-                 [lein-less-npm "0.1.0-SNAPSHOT"]]
+                 [lein-less-npm "0.1.0"]]
   :aot [com.dillius.pts.main]
   :main com.dillius.pts.main
   :plugins [[lein-ring "0.8.2"]
